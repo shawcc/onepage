@@ -59,6 +59,8 @@ const Navigation = () => {
   )
 }
 
+import ProtectedRoute from './components/ProtectedRoute'
+
 const App: React.FC = () => {
   return (
     <AuthProvider>
@@ -68,14 +70,32 @@ const App: React.FC = () => {
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/editor/:templateId" element={<Editor />} />
             <Route path="/templates" element={<Templates />} />
             <Route path="/knowledge" element={<Knowledge />} />
-            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/image-studio" element={<ImageStudio />} />
-            <Route path="/ai-expert" element={<AIAssistant />} />
+            
+            {/* Protected Routes */}
+            <Route path="/editor/:templateId" element={
+              <ProtectedRoute>
+                <Editor />
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard" element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/image-studio" element={
+              <ProtectedRoute>
+                <ImageStudio />
+              </ProtectedRoute>
+            } />
+            <Route path="/ai-expert" element={
+              <ProtectedRoute>
+                <AIAssistant />
+              </ProtectedRoute>
+            } />
           </Routes>
         </main>
 

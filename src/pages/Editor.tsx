@@ -216,6 +216,80 @@ const Editor: React.FC = () => {
     }
   }
 
+  // --- Save Logic (Supabase) ---
+  const handleSaveToCloud = async () => {
+      // Basic check for Supabase config
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+      
+      if (!supabaseUrl || !supabaseKey) {
+          alert("无法连接数据库：请检查 VITE_SUPABASE_URL 和 VITE_SUPABASE_ANON_KEY 配置。")
+          return
+      }
+
+      // Dynamic import to avoid bundling issues if supabase is not set up
+      const { createClient } = await import('@supabase/supabase-js')
+      const supabase = createClient(supabaseUrl, supabaseKey)
+
+      try {
+          const { data, error } = await supabase
+              .from('projects')
+              .insert([
+                  { 
+                      name: templateData.appInfo.name || 'Untitled Project', 
+                      data: templateData,
+                      // Store a simple identifier since we don't have real user UUIDs
+                      owner_code: 'magic-user' 
+                  }
+              ])
+              .select()
+
+          if (error) throw error
+
+          alert('✅ 项目已保存到云端！')
+      } catch (err: any) {
+          console.error('Save failed:', err)
+          alert('保存失败: ' + (err.message || '未知错误'))
+      }
+  }
+
+  // --- Save Logic (Supabase) ---
+  const handleSaveToCloud = async () => {
+      // Basic check for Supabase config
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+      
+      if (!supabaseUrl || !supabaseKey) {
+          alert("无法连接数据库：请检查 VITE_SUPABASE_URL 和 VITE_SUPABASE_ANON_KEY 配置。")
+          return
+      }
+
+      // Dynamic import to avoid bundling issues if supabase is not set up
+      const { createClient } = await import('@supabase/supabase-js')
+      const supabase = createClient(supabaseUrl, supabaseKey)
+
+      try {
+          const { data, error } = await supabase
+              .from('projects')
+              .insert([
+                  { 
+                      name: templateData.appInfo.name || 'Untitled Project', 
+                      data: templateData,
+                      // Store a simple identifier since we don't have real user UUIDs
+                      owner_code: 'magic-user' 
+                  }
+              ])
+              .select()
+
+          if (error) throw error
+
+          alert('✅ 项目已保存到云端！')
+      } catch (err: any) {
+          console.error('Save failed:', err)
+          alert('保存失败: ' + (err.message || '未知错误'))
+      }
+  }
+
   if (!templateData) return <div className="flex items-center justify-center h-screen text-gray-500">正在加载设计引擎...</div>
 
   const { theme } = templateData;
@@ -625,6 +699,13 @@ const Editor: React.FC = () => {
             <h1 className="font-bold text-gray-800">OnePage AI Editor</h1>
           </div>
         </div>
+        <button 
+          onClick={handleSaveToCloud}
+          className="flex items-center gap-2 bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700 transition-all font-medium active:scale-95 shadow-lg shadow-blue-200 mr-4"
+        >
+          <Sparkles size={16} />
+          保存项目
+        </button>
         <button 
           onClick={handleCopyHtml}
           className="flex items-center gap-2 bg-black text-white px-5 py-2.5 rounded-lg hover:bg-gray-800 transition-all font-medium active:scale-95 shadow-lg shadow-gray-200"

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
+import { MAGIC_CODES } from '../data/magicCodes'
 
 // Define a simple User type for Magic Code auth
 export interface MagicUser {
@@ -21,13 +22,6 @@ const AuthContext = createContext<AuthContextType>({
   signOut: () => {},
 })
 
-// Hardcoded Magic Codes (In a real app, this could be fetched from a secure JSON file or API)
-const MAGIC_CODES: Record<string, MagicUser> = {
-  'onepage2024': { id: '1', code: 'onepage2024', role: 'user' },
-  'admin888': { id: '2', code: 'admin888', role: 'admin' },
-  'demo': { id: '3', code: 'demo', role: 'user' }
-}
-
 const AUTH_STORAGE_KEY = 'onepage_magic_auth'
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -37,16 +31,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     // Check local storage for existing session
     const storedCode = localStorage.getItem(AUTH_STORAGE_KEY)
-    if (storedCode && MAGIC_CODES[storedCode]) {
-      setUser(MAGIC_CODES[storedCode])
+    if (storedCode) {
+      // @ts-ignore
+      const config = MAGIC_CODES[storedCode]
+      if (config) {
+        setUser({ ...config, code: storedCode })
+      }
     }
     setLoading(false)
   }, [])
 
   const signIn = (code: string) => {
-    const validUser = MAGIC_CODES[code]
-    if (validUser) {
-      setUser(validUser)
+    // @ts-ignore
+    const config = MAGIC_CODES[code]
+    if (config) {
+      const userObj = { ...config, code }
+      setUser(userObj)
       localStorage.setItem(AUTH_STORAGE_KEY, code)
       return true
     }

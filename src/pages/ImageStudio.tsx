@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ImageBuilder from '../components/ImageBuilder';
 
 const ImageStudio: React.FC = () => {
+  const navigate = useNavigate();
+
   const handleSave = (newImageUrl: string) => {
     // In standalone mode, we just trigger a download of the image
     // The ImageBuilder's onSave gives us a dataURL
@@ -14,8 +17,8 @@ const ImageStudio: React.FC = () => {
   };
 
   const handleClose = () => {
-    // In standalone mode, maybe reset or just do nothing
-    console.log("Image generation completed");
+    // Navigate back to home page
+    navigate('/');
   };
 
   return (

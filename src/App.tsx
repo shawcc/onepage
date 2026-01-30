@@ -44,14 +44,13 @@ const Navigation = () => {
           <div className="flex items-center gap-4">
              <Link to="/dashboard" className="text-sm font-medium text-gray-600 hover:text-gray-900">工作台</Link>
              <button onClick={handleSignOut} className="text-sm font-medium text-red-600 hover:text-red-700">退出</button>
-             <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-xs">
-                {user.email?.slice(0, 2).toUpperCase()}
+             <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center text-white font-bold text-xs">
+                {user.role === 'admin' ? 'A' : 'U'}
              </div>
           </div>
         ) : (
           <div className="space-x-3">
-            <Link to="/login" className="text-sm font-medium text-gray-600 hover:text-gray-900">登录</Link>
-            <Link to="/register" className="text-sm font-medium bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-all">免费注册</Link>
+            <Link to="/login" className="text-sm font-medium bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-all">输入访问码 (Access Code)</Link>
           </div>
         )}
       </div>
@@ -73,7 +72,6 @@ const App: React.FC = () => {
             <Route path="/templates" element={<Templates />} />
             <Route path="/knowledge" element={<Knowledge />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
             
             {/* Protected Routes */}
             <Route path="/editor/:templateId" element={

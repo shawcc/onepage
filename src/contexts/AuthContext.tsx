@@ -1,59 +1,65 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { Session, User } from '@supabase/supabase-js'
-import { supabase } from '../lib/supabase'
+
+// Define a simple User type for Magic Code auth
+export interface MagicUser {
+  id: string
+  code: string
+  role: 'user' | 'admin'
+}
 
 interface AuthContextType {
-  session: Session | null
-  user: User | null
+  user: MagicUser | null
   loading: boolean
-  signOut: () => Promise<void>
+  signIn: (code: string) => boolean
+  signOut: () => void
 }
 
 const AuthContext = createContext<AuthContextType>({
-  session: null,
   user: null,
   loading: true,
-  signOut: async () => {},
+  signIn: () => false,
+  signOut: () => {},
 })
 
+// Hardcoded Magic Codes (In a real app, this could be fetched from a secure JSON file or API)
+const MAGIC_CODES: Record<string, MagicUser> = {
+  'onepage2024': { id: '1', code: 'onepage2024', role: 'user' },
+  'admin888': { id: '2', code: 'admin888', role: 'admin' },
+  'demo': { id: '3', code: 'demo', role: 'user' }
+}
+
+const AUTH_STORAGE_KEY = 'onepage_magic_auth'
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [session, setSession] = useState<Session | null>(null)
-  const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<MagicUser | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!supabase) {
-        setLoading(false)
-        return
+    // Check local storage for existing session
+    const storedCode = localStorage.getItem(AUTH_STORAGE_KEY)
+    if (storedCode && MAGIC_CODES[storedCode]) {
+      setUser(MAGIC_CODES[storedCode])
     }
-
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-      setUser(session?.user ?? null)
-      setLoading(false)
-    })
-
-    // Listen for changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-      setUser(session?.user ?? null)
-      setLoading(false)
-    })
-
-    return () => subscription.unsubscribe()
+    setLoading(false)
   }, [])
 
-  const signOut = async () => {
-    if (supabase) {
-        await supabase.auth.signOut()
+  const signIn = (code: string) => {
+    const validUser = MAGIC_CODES[code]
+    if (validUser) {
+      setUser(validUser)
+      localStorage.setItem(AUTH_STORAGE_KEY, code)
+      return true
     }
+    return false
+  }
+
+  const signOut = () => {
+    setUser(null)
+    localStorage.removeItem(AUTH_STORAGE_KEY)
   }
 
   return (
-    <AuthContext.Provider value={{ session, user, loading, signOut }}>
+    <AuthContext.Provider value={{ user, loading, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   )

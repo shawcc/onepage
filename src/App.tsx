@@ -7,7 +7,10 @@ import Knowledge from './pages/Knowledge'
 import Dashboard from './pages/Dashboard'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import ImageStudio from './pages/ImageStudio'
+import AIAssistant from './pages/AIAssistant'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
+import { Sparkles, Image as ImageIcon } from 'lucide-react'
 
 const Navigation = () => {
   const { user, signOut } = useAuth()
@@ -25,10 +28,18 @@ const Navigation = () => {
           <span className="w-8 h-8 bg-black text-white rounded-lg flex items-center justify-center font-serif text-lg">O</span>
           OnePage
         </Link>
+        <div className="hidden md:flex ml-8 gap-6 text-sm font-medium text-gray-600">
+            <Link to="/templates" className="hover:text-black">模板库</Link>
+            <Link to="/ai-expert" className="hover:text-purple-600 flex items-center gap-1">
+                <Sparkles size={14} className="text-purple-500" /> AI 专家
+            </Link>
+            <Link to="/image-studio" className="hover:text-blue-600 flex items-center gap-1">
+                <ImageIcon size={14} className="text-blue-500" /> 配图工具
+            </Link>
+            <Link to="/knowledge" className="hover:text-black">知识库</Link>
+        </div>
       </div>
       <div className="flex items-center gap-6">
-        <Link to="/knowledge" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">营销知识库</Link>
-        <div className="h-4 w-px bg-gray-200"></div>
         {user ? (
           <div className="flex items-center gap-4">
              <Link to="/dashboard" className="text-sm font-medium text-gray-600 hover:text-gray-900">工作台</Link>
@@ -63,6 +74,8 @@ const App: React.FC = () => {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/image-studio" element={<ImageStudio />} />
+            <Route path="/ai-expert" element={<AIAssistant />} />
           </Routes>
         </main>
 

@@ -28,8 +28,10 @@ const Templates: React.FC = () => {
             
             <div className="p-5">
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-xs font-medium px-2 py-0.5 bg-blue-50 text-blue-600 rounded">
-                  {template.category}
+                <span className={`text-xs font-medium px-2 py-0.5 rounded ${
+                  template.category === 'marketplace' ? 'bg-purple-50 text-purple-600' : 'bg-blue-50 text-blue-600'
+                }`}>
+                  {template.category === 'marketplace' ? '插件/应用' : '其他'}
                 </span>
                 {template.tags && template.tags.slice(0, 2).map(tag => (
                   <span key={tag} className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded flex items-center gap-1">
@@ -47,7 +49,7 @@ const Templates: React.FC = () => {
               </p>
               
               <Link 
-                to={`/editor/new?templateId=${template.id}`}
+                to={`/editor/${template.id}`}
                 className="block w-full text-center bg-gray-900 text-white py-2 rounded-lg font-medium hover:bg-orange-600 transition-colors"
               >
                 使用此模板

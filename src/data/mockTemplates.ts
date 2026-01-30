@@ -121,6 +121,78 @@ export const mockTemplates: Template[] = [
           ]
         }
       ]
+}
+  },
+  {
+    id: 'feishu-time-management',
+    name: '工时管理 (飞书/Lark 风格)',
+    description: '专业的工时与资源管理插件详情页。展示了多维度的时间追踪、资源规划和团队协作功能。',
+    thumbnail: 'https://placehold.co/500x320/6f5cf1/ffffff?text=Feishu+Time+Management',
+    category: 'marketplace',
+    tags: ['Time Management', 'Resource Planning', 'Feishu'],
+    conversionScore: 97,
+    initialData: {
+      layout: 'feishu',
+      theme: {
+        primaryColor: '#6f5cf1', // Purple from the icon
+        secondaryColor: '#f3f0ff',
+        backgroundColor: '#ffffff',
+        textColor: '#1f2329'
+      },
+      appInfo: {
+        icon: '⏱️',
+        name: '工时管理',
+        tagline: '支持项目工时管理，统计每日或某段时间工时数据，并支持时间可视化图表和信息入门导览等，适用于企业内的项目管理流程。',
+        vendor: '飞书项目',
+        rating: 4.9,
+        reviewCount: 210,
+        installCount: '27721',
+        badge: '官方'
+      },
+      media: [
+        { type: 'image', url: 'https://placehold.co/800x450/6f5cf1/ffffff?text=Resource+Planning+Banner' }
+      ],
+      tabs: {
+        overview: {
+          summary: "Resource Management, Timesheet Reports, Resource Planning & Timelines, Capacity Planner, Tracker and Advanced Roadmaps Integration\n\n### Resource Planning & Time Tracking\nResource Allocation, Team Capacity & Team Calendar. Activity Timeline resource planning tool provides visibility for your resource capacity planning.",
+          features: [
+            {
+              title: "Planner",
+              description: "Resource & Capacity Management. Resource utilization & Team planning available in capacity planner. Check available capacity with our calendar for Jira tasks."
+            },
+            {
+              title: "Workspace",
+              description: "Personal Scheduling & Time Tracking. Personal time tracker, Time Tracking & Charts. Users can see the scheduled tasks & track time. Export tasks into personal Calendars."
+            },
+            {
+              title: "Timesheets",
+              description: "Timesheet Reports. Custom timesheet reports for Jira on team & individual levels. Get Planned vs Actual, Resource Utilization & Project Reports."
+            }
+          ]
+        }
+      },
+      sidebar: [
+        {
+          title: '基本信息',
+          items: [
+            { label: '开发者', value: '飞书项目' },
+            { label: '联系邮箱', value: 'contact@feishu.cn', href: 'mailto:contact@feishu.cn' },
+            { label: '版本号', value: '5.2.12' },
+            { label: '最近更新', value: '2026-01-27' },
+            { label: '插件分类', value: '项目管理' },
+            { label: '隐私协议', value: '查看隐私协议', href: '#' }
+          ]
+        },
+        {
+          title: '适用于以下位置',
+          items: [
+            { label: '协作', value: '支持部门' },
+            { label: '项目管理', value: '人员规模 2 人以上' },
+            { label: '效率提升', value: '大规模部署' },
+            { label: '插件集成', value: '工作流集成' }
+          ]
+        }
+      ]
     }
   }
 ]

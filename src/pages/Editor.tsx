@@ -95,11 +95,35 @@ const Editor: React.FC = () => {
     }
   }
 
-  // --- AI Logic (Mock) ---
-  const processAICommand = (text: string) => {
+  // --- AI Logic (Real + Mock Fallback) ---
+  const processAICommand = async (text: string) => {
     setIsTyping(true)
     
-    // Simulate network delay
+    // Check if we have backend connectivity (Basic check)
+    // For now, we will try to fetch. If it fails or returns mock, we use local logic.
+    try {
+        const response = await fetch('/api/generate-marketing-copy', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                prompt: text,
+                context: JSON.stringify(templateData) // Send current state as context
+            })
+        })
+
+        if (response.ok) {
+            const data = await response.json()
+            if (data.copy && !data.mock) {
+                setMessages(prev => [...prev, { role: 'assistant', content: data.copy }])
+                setIsTyping(false)
+                return
+            }
+        }
+    } catch (e) {
+        console.warn("Backend AI failed, falling back to local logic", e)
+    }
+
+    // Fallback to local logic (same as before)
     setTimeout(() => {
       let response = ""
       const newData = JSON.parse(JSON.stringify(templateData))
@@ -485,7 +509,7 @@ const Editor: React.FC = () => {
                                 padding: '8px 32px', borderRadius: '6px', fontSize: '14px', fontWeight: '500',
                                 border: 'none', cursor: 'pointer'
                             }}>
-                                添加组件
+                                添加插件
                             </button>
                             <button style={{ 
                                 backgroundColor: 'white', color: '#1f2329', 
@@ -518,7 +542,7 @@ const Editor: React.FC = () => {
                     概述
                 </div>
                 <div style={{ padding: '16px 0', color: '#646a73', cursor: 'pointer', fontSize: '14px' }}>
-                    评论
+                    权限
                 </div>
             </div>
 
@@ -557,7 +581,7 @@ const Editor: React.FC = () => {
                 {/* Right: Sidebar */}
                 <div style={{ flex: 1 }}>
                      {sidebar.map((section: any, idx: number) => (
-                        <div key={idx} style={{ marginBottom: '32px' }}>
+                        <div key={idx} style={{ marginBottom: '32px', border: '1px solid #dee0e3', borderRadius: '8px', padding: '16px' }}>
                             <h4 style={{ fontSize: '14px', fontWeight: 'bold', color: '#1f2329', marginBottom: '16px' }}>
                                 {section.title}
                             </h4>
